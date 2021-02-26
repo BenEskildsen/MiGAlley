@@ -140,7 +140,6 @@ const entityShoot = (game: Game, entity: Entity, payload) => {
       let velocity = null;
       if (entity.velocity != null) {
         velocity = magnitude(entity.velocity) + Entities[projectileType].config.velocity;
-        console.log(magnitude(entity.velocity), velocity);
       }
       projectile = Entities[projectileType].make(
         game, position, entity.playerID, theta + Math.PI, velocity,

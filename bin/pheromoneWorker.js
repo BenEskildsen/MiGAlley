@@ -1411,8 +1411,8 @@ var config = {
   pitchRate: 0.025, // in radians
   minMoveDuration: 30,
   maxMoveDuration: 400,
-  startSpeed: 10,
-  maxSpeed: 50,
+  startSpeed: 5,
+  maxSpeed: 25,
   flipped: false,
 
   drag: { x: 0, y: 0 },
