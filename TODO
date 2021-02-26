@@ -1,0 +1,57 @@
+
+
+- - - - - - TO THINK ABOUT - - - - - -
+  - how do AI planes decide what to do?
+    - target player
+      - targetting the controlled entity
+      - change pitch to point at it
+      - flip when upside down
+  - add in procedurally-generated clouds?
+  - zoom out when you speed up and zoom in when you slow down?
+
+
+- - - - - - ISSUES - - - - - -
+  - shooting
+    - bullets just can't travel very fast because of limit of not skipping squares
+    - holding spacebar doesn't consistently shoot
+  - jet not colliding with obstacles any more
+    - because they're not checking for canDoMove any more
+  - make viewPos tracking smoother
+  - allow bigger grids
+    - don't initialize entities: [] in all grid squares
+  - sometimes wasd stops working to control the screen!
+
+
+- - - - - - TODO - - - - - -
+  - player-controllable jet
+    - tune controls
+      - jet is still too fast so it doesn't visibly slow
+
+  - add enemy planes
+  - figure out world sizing and viewport
+  - ability to fire missiles
+  - HUDs
+    - thrust and airspeed
+    - ammo amount
+
+  - art
+    - Sabre + MiG
+    - jet sprites
+      - side view
+      - tilt view
+      - shooting
+      - on fire
+      - exploding
+
+
+- - - - - - NICE-TO-HAVE - - - - - - - -
+
+
+- - - - - - - BUGS - - - - - - -
+
+
+- - - - - - - REFACTORS - - - - - - -
+
+
+- - - - - - - WON'T FIX - - - - - -
+

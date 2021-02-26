@@ -1,0 +1,6 @@
+git add --all
+touch commit_file
+echo $1 >> commit_file
+git diff --staged TODO | grep "^- " >> commit_file
+git commit -F commit_file
+rm commit_file

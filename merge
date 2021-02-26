@@ -1,0 +1,2 @@
+git checkout prod && git pull && git merge dev && git checkout dev && git pull && git merge prod && git status
+
