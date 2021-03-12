@@ -94,6 +94,7 @@ function Game(props: Props): React.Node {
       className="background" id="background"
       style={{
         position: 'relative',
+        display: 'inline-block',
       }}
     >
       {

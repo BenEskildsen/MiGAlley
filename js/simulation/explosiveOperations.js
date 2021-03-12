@@ -8,7 +8,7 @@ const {
   add, subtract, vectorTheta, makeVector, containsVector,
   dist, equals, magnitude, round,
 } = require('../utils/vectors');
-const {clamp, closeTo, thetaToDir, isDiagonalMove} = require('../utils/helpers');
+const {clamp, closeToTheta, thetaToDir, isDiagonalMove} = require('../utils/helpers');
 const {lookupInGrid} = require('../utils/gridHelpers');
 const {removeEntity} = require('../simulation/entityOperations');
 const {dealDamageToEntity} = require('../simulation/miscOperations');

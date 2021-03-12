@@ -1,6 +1,6 @@
 // @flow
 
-const {closeTo, isDiagonalTheta, thetaToDir} = require('../utils/helpers');
+const {closeToTheta, isDiagonalTheta, thetaToDir} = require('../utils/helpers');
 const {
   getPheromoneAtPosition,
 } = require('../selectors/pheromones');
@@ -94,7 +94,7 @@ const makeAction = (
   // NOTE: also requires change in getDuration below
   // if (actionType == 'TURN') {
   //   const thetaDiff = Math.abs(entity.theta - payload) % (2*Math.PI);
-  //   if (closeTo(thetaDiff, Math.PI)) {
+  //   if (closeToTheta(thetaDiff, Math.PI)) {
   //     duration *= 2;
   //   }
   // }
@@ -164,7 +164,7 @@ const getDuration = (game: Game, entity: Entity, actionType: string): boolean =>
   //   // if this is true, then we're in the current turn action already
   //   if (curAction.payload == entity.theta) {
   //     const thetaDiff = Math.abs(entity.prevTheta - entity.theta) % (2*Math.PI);
-  //     if (closeTo(thetaDiff, Math.PI)) {
+  //     if (closeToTheta(thetaDiff, Math.PI)) {
   //       duration *= 2;
   //     }
   //   }

@@ -1411,7 +1411,7 @@ var config = {
   pitchRate: 0.025, // in radians
   minMoveDuration: 30,
   maxMoveDuration: 400,
-  startSpeed: 5,
+  startSpeed: 1,
   maxSpeed: 25,
   flipped: false,
 
@@ -1531,7 +1531,7 @@ var spriteRenderFn = function spriteRenderFn(ctx, game, jet) {
   }
 
   var sprite = {
-    img: game.sprites.SABRE
+    img: game.sprites.MIG
   };
   if (sprite.img != null) {
     ctx.save();
@@ -3579,7 +3579,7 @@ var _require6 = require('../selectors/pheromones'),
 
 var _require7 = require('../utils/helpers'),
     thetaToDir = _require7.thetaToDir,
-    closeTo = _require7.closeTo;
+    closeToTheta = _require7.closeToTheta;
 
 var globalConfig = require('../config');
 
@@ -4084,7 +4084,7 @@ module.exports = {
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var _require = require('../utils/helpers'),
-    closeTo = _require.closeTo,
+    closeToTheta = _require.closeToTheta,
     isDiagonalTheta = _require.isDiagonalTheta,
     thetaToDir = _require.thetaToDir;
 
@@ -4177,7 +4177,7 @@ var makeAction = function makeAction(game, entity, actionType, payload) {
   // NOTE: also requires change in getDuration below
   // if (actionType == 'TURN') {
   //   const thetaDiff = Math.abs(entity.theta - payload) % (2*Math.PI);
-  //   if (closeTo(thetaDiff, Math.PI)) {
+  //   if (closeToTheta(thetaDiff, Math.PI)) {
   //     duration *= 2;
   //   }
   // }
@@ -4265,7 +4265,7 @@ var getDuration = function getDuration(game, entity, actionType) {
   //   // if this is true, then we're in the current turn action already
   //   if (curAction.payload == entity.theta) {
   //     const thetaDiff = Math.abs(entity.prevTheta - entity.theta) % (2*Math.PI);
-  //     if (closeTo(thetaDiff, Math.PI)) {
+  //     if (closeToTheta(thetaDiff, Math.PI)) {
   //       duration *= 2;
   //     }
   //   }
@@ -4327,7 +4327,7 @@ var globalConfig = require('../config');
 
 var _require2 = require('../utils/helpers'),
     thetaToDir = _require2.thetaToDir,
-    closeTo = _require2.closeTo,
+    closeToTheta = _require2.closeToTheta,
     encodePosition = _require2.encodePosition;
 
 var _require3 = require('../utils/gridHelpers'),
@@ -4837,7 +4837,7 @@ var moveEntity = function moveEntity(game, entity, nextPos) {
 
   // only rotate if you have to, so as not to blow away prevTheta
   // const nextTheta = vectorTheta(subtract(entity.prevPosition, entity.position));
-  // if (!closeTo(nextTheta, entity.theta) && !entity.type == 'BULLET') {
+  // if (!closeToTheta(nextTheta, entity.theta) && !entity.type == 'BULLET') {
   //   rotateEntity(
   //     game, entity, nextTheta,
   //   );
@@ -5577,10 +5577,15 @@ var clamp = function clamp(val, min, max) {
 };
 
 // NOTE: for angles in radians being close to each other!
-var closeTo = function closeTo(a, b) {
+var closeToTheta = function closeToTheta(a, b, e) {
   var normalizedA = a % (2 * Math.PI);
-  var epsilon = 0.00001;
+  var epsilon = e != null ? e : 0.00001;
   return Math.abs(normalizedA - b) < epsilon;
+};
+
+var closeTo = function closeTo(a, b, e) {
+  var epsilon = e != null ? e : 0.00001;
+  return Math.abs(a - b) < epsilon;
 };
 
 var sameArray = function sameArray(arrayA, arrayB) {
@@ -5715,7 +5720,8 @@ function deepCopy(obj) {
 }
 
 module.exports = {
-  clamp: clamp, closeTo: closeTo, sameArray: sameArray, thetaToDir: thetaToDir,
+  clamp: clamp, closeToTheta: closeToTheta, sameArray: sameArray, thetaToDir: thetaToDir,
+  closeTo: closeTo,
   isDiagonalTheta: isDiagonalTheta, isDiagonalMove: isDiagonalMove,
   encodePosition: encodePosition, decodePosition: decodePosition,
   getDisplayTime: getDisplayTime, isMobile: isMobile,

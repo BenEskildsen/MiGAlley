@@ -19,10 +19,16 @@
   - make viewPos tracking smoother
   - allow bigger grids
     - don't initialize entities: [] in all grid squares
+    - probably don't need grid at all since bullets need to travel faster
+      than 60 squares/second
   - sometimes wasd stops working to control the screen!
+  - fix flip effectIndex
 
 
 - - - - - - TODO - - - - - -
+  - add in sliders
+  - add back in sine-wave control
+
   - player-controllable jet
     - tune controls
       - jet is still too fast so it doesn't visibly slow

@@ -29,7 +29,7 @@ const {
   abs, dist, clampMagnitude,
 } = require('../utils/vectors');
 const {
-  clamp, closeTo, encodePosition, decodePosition,
+  clamp, closeTo, closeToTheta, encodePosition, decodePosition,
 } = require('../utils/helpers');
 const {getInterpolatedIndex, getDictIndexStr} = require('../selectors/sprites');
 const {
@@ -44,6 +44,7 @@ const globalConfig = require('../config');
 const {dealDamageToEntity} = require('../simulation/miscOperations');
 const {Entities} = require('../entities/registry');
 const {canAffordBuilding} = require('../selectors/buildings');
+const {slider} = require('../utils/slider');
 
 import type {
   Game, Entity, Action, Ant,
@@ -171,44 +172,78 @@ const updateJets = (game): void => {
     }
 
     jet.theta = (jet.theta + 2 * Math.PI) % (2 * Math.PI);
-    // console.log(jet.theta.toFixed(2));
 
-    // handle aerodynamic forces
-    const speed = magnitude(jet.velocity);
-    const drag = 0.5 * jet.dragCoefficient * speed * speed;
-    const lift = 0.5 * jet.liftCoefficient * speed * speed * Math.abs(Math.cos(jet.theta));
-    const dragVec = makeVector(jet.theta, -1 * drag);
-    // dragVec.y *= -1;
-    // const liftVec = {x: 0, y: -1 * lift};
-    const liftVec = makeVector(jet.theta + Math.PI / 2, lift);
-    const thrustVec = makeVector(jet.theta, -1 * jet.thrust);
-    const weightVec = {x: 0, y: jet.mass};
+    // const moveDir = getJetMoveDirDetailed(game, jet);
+    const moveDir = getJetMoveDirSimple(game, jet);
 
-    // combine into jet acceleration and speed
-    const accel = scale(add(dragVec, liftVec, thrustVec, weightVec), 1/jet.mass);
-    jet.velocity = clampMagnitude(add(jet.velocity, accel), -jet.maxSpeed, jet.maxSpeed);
-
-    jet.accel = accel;
-    jet.drag = dragVec;
-    jet.lift = liftVec;
-    jet.thrustVec = thrustVec;
-    jet.weight = weightVec;
-
-    // console.log(drag, lift, speed);
-    // console.log('drag', dragVec, 'lift', liftVec, 'thrust', thrustVec);
-    // console.log(
-    //   'accel', accel,
-    //   'speed', jet.velocity,
-    //   'duration', jet.MOVE.duration.toFixed(2),
-    // );
-
-    // keep jets moving
-    const moveDir = makeVector(vectorTheta(jet.velocity), 1);
     const nextPos = add(jet.contPos, moveDir);
     jet.contPos = nextPos;
     moveEntity(game, jet, round(nextPos));
   }
 
+};
+
+const getJetMoveDirSimple = (game, jet) => {
+  const speed = magnitude(jet.velocity);
+  const moveDir = {
+    x: -1 * speed * Math.cos(jet.theta),
+    y: -1 * speed * Math.sin(jet.theta),
+  };
+  if (moveDir.y < 0) {
+    moveDir.y /= 2;
+  }
+  if (moveDir.y > 0) {
+    moveDir.y *= 1.5;
+  }
+  // stall out when going straight up
+  if (
+    moveDir.y < 0 && closeTo(moveDir.x, 0, 0.1) &&
+    !(game.hotKeys.keysDown.up || game.hotKeys.keysDown.down)
+  ) {
+    moveDir.y *= -0.5;
+  }
+  return moveDir;
+};
+
+const getJetMoveDirDetailed = (game, jet) => {
+  // handle aerodynamic forces
+  const speed = magnitude(jet.velocity);
+  const drag = 0.5 * jet.dragCoefficient * speed * speed;
+  const lift = 0.5 * jet.liftCoefficient * speed * speed * Math.abs(Math.cos(jet.theta));
+  const dragVec = makeVector(jet.theta, -1 * drag);
+  // dragVec.y *= -1;
+  // const liftVec = {x: 0, y: -1 * lift};
+  const liftVec = makeVector(jet.theta + Math.PI / 2, lift);
+  const thrustVec = makeVector(jet.theta, -1 * jet.thrust);
+  const weightVec = {
+    x: 0,
+    y: slider(
+      jet.mass,
+      {name: 'weight', min: 1, max: 50},
+    ),
+  };
+
+  // combine into jet acceleration and speed
+  const accel = scale(add(dragVec, liftVec, thrustVec, weightVec), 1/jet.mass);
+  jet.velocity = clampMagnitude(add(jet.velocity, accel), -jet.maxSpeed, jet.maxSpeed);
+
+  jet.accel = accel;
+  jet.drag = dragVec;
+  jet.lift = liftVec;
+  jet.thrustVec = thrustVec;
+  jet.weight = weightVec;
+
+  // console.log(drag, lift, speed);
+  // console.log('drag', dragVec, 'lift', liftVec, 'thrust', thrustVec);
+  // console.log(
+  //   'accel', accel,
+  //   'speed', jet.velocity,
+  //   'duration', jet.MOVE.duration.toFixed(2),
+  // );
+
+  // keep jets moving
+  const moveDir = makeVector(vectorTheta(jet.velocity), 1);
+  return moveDir;
 };
 
 //////////////////////////////////////////////////////////////////////////
@@ -443,7 +478,7 @@ const updateTowers = (game): void => {
     if (tower.type == 'MISSILE_TURRET') {
       tower.thetaAccel = 0;
       tower.theta = clamp(targetTheta, config.minTheta, config.maxTheta);
-    } else if (closeTo(tower.theta, targetTheta)) {
+    } else if (closeToTheta(tower.theta, targetTheta)) {
       tower.thetaAccel /= -2;
     } else if (tower.theta < targetTheta) {
       tower.thetaAccel = config.thetaAccel;
@@ -454,7 +489,7 @@ const updateTowers = (game): void => {
     tower.thetaSpeed = clamp(tower.thetaSpeed, -config.maxThetaSpeed, config.maxThetaSpeed);
     tower.theta += tower.thetaSpeed;
     const clamped = clamp(tower.theta, config.minTheta, config.maxTheta);
-    if (!closeTo(clamped, tower.theta)) {
+    if (!closeToTheta(clamped, tower.theta)) {
       tower.thetaSpeed = 0;
       tower.thetaAccel = 0;
     }

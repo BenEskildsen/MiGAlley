@@ -10,10 +10,15 @@ const clamp = (val: number, min: number, max: number): number => {
 }
 
 // NOTE: for angles in radians being close to each other!
-const closeTo = (a, b): boolean => {
+const closeToTheta = (a, b, e): boolean => {
   const normalizedA = a % (2*Math.PI);
-  const epsilon = 0.00001;
+  const epsilon = e != null ? e :  0.00001;
   return Math.abs(normalizedA - b) < epsilon;
+}
+
+const closeTo = (a, b, e): boolean => {
+  const epsilon = e != null ? e :  0.00001;
+  return Math.abs(a - b) < epsilon;
 }
 
 const sameArray = (arrayA, arrayB): boolean => {
@@ -134,7 +139,8 @@ function deepCopy(obj) {
 }
 
 module.exports = {
-	clamp, closeTo, sameArray, thetaToDir,
+	clamp, closeToTheta, sameArray, thetaToDir,
+  closeTo,
   isDiagonalTheta, isDiagonalMove,
   encodePosition, decodePosition,
   getDisplayTime, isMobile,

@@ -29,23 +29,26 @@ function Main(props: Props): React.Node {
     );
   } else if (state.screen == 'EDITOR') {
     content = (
-      <span>
-      <Game
-        dispatch={props.dispatch} store={props.store}
-        gameID={state.game.gameID}
-        tickInterval={state.game.tickInterval}
-        isInLevelEditor={true}
-      />
+      <div>
+        <Game
+          dispatch={props.dispatch} store={props.store}
+          gameID={state.game.gameID}
+          tickInterval={state.game.tickInterval}
+          isInLevelEditor={true}
+        />
         <LevelEditor
           state={state}
           dispatch={props.dispatch} store={props.store}
         />
-      </span>
+      </div>
     );
   }
 
   return (
     <React.Fragment>
+      <div
+        id="sliderSidebar" style={{display: 'inline-block'}}
+      />
       {content}
       {state.modal}
     </React.Fragment>

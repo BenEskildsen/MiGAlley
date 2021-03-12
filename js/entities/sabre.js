@@ -30,7 +30,7 @@ const config = {
   pitchRate: 0.025, // in radians
   minMoveDuration: 30,
   maxMoveDuration: 400,
-  startSpeed: 5,
+  startSpeed: 1,
   maxSpeed: 25,
   flipped: false,
 
@@ -163,7 +163,7 @@ const spriteRenderFn = (ctx, game, jet) => {
 
 
   const sprite = {
-    img: game.sprites.SABRE,
+    img: game.sprites.MIG,
   };
   if (sprite.img != null) {
     ctx.save();

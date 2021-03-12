@@ -4,7 +4,7 @@ const {
   add, subtract, vectorTheta, makeVector, containsVector,
   dist, equals, magnitude, round,
 } = require('../utils/vectors');
-const {closeTo, thetaToDir, isDiagonalMove} = require('../utils/helpers');
+const {closeToTheta, thetaToDir, isDiagonalMove} = require('../utils/helpers');
 const {
   makeAction, isActionTypeQueued,
   queueAction, stackAction, cancelAction,
@@ -47,7 +47,7 @@ const entityStartCurrentAction = (
       agentPutdown(game, entity);
       break;
     case 'MOVE_TURN':
-      if (!closeTo(entity.theta, curAction.payload.nextTheta)) {
+      if (!closeToTheta(entity.theta, curAction.payload.nextTheta)) {
         rotateEntity(game, entity, curAction.payload.nextTheta);
       }
       // fall-through

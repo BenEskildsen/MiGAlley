@@ -4,7 +4,7 @@ const {
   add, subtract, vectorTheta, equals,
 } = require('../utils/vectors');
 const globalConfig = require('../config');
-const {thetaToDir, closeTo, encodePosition} = require('../utils/helpers');
+const {thetaToDir, closeToTheta, encodePosition} = require('../utils/helpers');
 const {
   insideGrid, insertInCell, deleteFromCell,
   getEntityPositions,
@@ -381,7 +381,7 @@ const moveEntity = (game: Game, entity: Entity, nextPos: Vector): Game => {
 
   // only rotate if you have to, so as not to blow away prevTheta
   // const nextTheta = vectorTheta(subtract(entity.prevPosition, entity.position));
-  // if (!closeTo(nextTheta, entity.theta) && !entity.type == 'BULLET') {
+  // if (!closeToTheta(nextTheta, entity.theta) && !entity.type == 'BULLET') {
   //   rotateEntity(
   //     game, entity, nextTheta,
   //   );

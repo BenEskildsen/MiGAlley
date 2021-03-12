@@ -26,7 +26,8 @@ const initSpriteSheetSystem = (store) => {
 
   loadSprite(dispatch, state, 'SKYLINE', './img/Skyline1.png');
 
-  loadSprite(dispatch, state, 'SABRE', './img/Sabre1.png');
+  loadSprite(dispatch, state, 'SABRE', './img/Sabre2.png');
+  loadSprite(dispatch, state, 'MIG', './img/MiG1.png');
 };
 
 const loadSprite = (dispatch, state, name, src): void => {

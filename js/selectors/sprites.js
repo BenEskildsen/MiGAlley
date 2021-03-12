@@ -10,7 +10,7 @@ const {
 const {getNeighborPositions} = require('../selectors/neighbors');
 const {getPositionsInFront} = require('../selectors/misc');
 const {getPheromoneAtPosition} = require('../selectors/pheromones');
-const {thetaToDir, closeTo} = require('../utils/helpers');
+const {thetaToDir, closeToTheta} = require('../utils/helpers');
 const globalConfig = require('../config');
 
 const getInterpolatedPos = (game: Game, entity: Entity): Vector => {

@@ -4,7 +4,7 @@ const {
   add, subtract, vectorTheta, makeVector, containsVector,
   dist, equals, magnitude, round,
 } = require('../utils/vectors');
-const {closeTo, thetaToDir, isDiagonalMove} = require('../utils/helpers');
+const {closeToTheta, thetaToDir, isDiagonalMove} = require('../utils/helpers');
 const globalConfig = require('../config');
 const {
   addEntity, removeEntity, moveEntity, pickupEntity, putdownEntity,
